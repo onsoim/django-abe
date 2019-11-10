@@ -1,0 +1,21 @@
+{% extends 'layouts/default/base.html' %}
+
+{% block content %}
+
+	{% if request.user.is_authenticated %}
+
+		Your username is <b>{{ request.user.username }}</b>.
+
+	{% else %}
+
+		<!-- You are a guest. -->
+
+		<script>
+
+			window.location.href = "{% url 'accounts:log_in' %}"
+			
+		</script>
+
+	{% endif %}
+
+{% endblock %}
