@@ -20,8 +20,10 @@ ENTRYPOINT \
 	apt-get install -y mysql-server && \
 	service mysql start && \
 	mysql < settings.sql && \
+	python3 manage.py makemigrations && \
 	python3 manage.py migrate && \
 	echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('root', '', 'toor')" | python3 manage.py shell && \
 	python3 manage.py runserver 0.0.0.0:8080
 
 # docker build -t oss . && docker run --rm -it -p 80:8080 -v $(pwd)/project:/project oss
+# docker exec -it $(docker container ls -q) mysql

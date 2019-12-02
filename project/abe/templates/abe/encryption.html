@@ -1,0 +1,166 @@
+{% extends 'layouts/default/base.html' %}
+
+{% load bootstrap4 %}
+
+{% load static %}
+
+{% block content %}
+
+	{% if request.user.is_authenticated %}
+
+		<form method="post" enctype="multipart/form-data">
+			<table align = "center" border="1" bordercolor="black" style="width:98%">
+				<th>File Upload</th>
+				<th>File Encrypt</th>
+				<tr border="1" bordercolor="black">
+					<!-- File Upload -->
+					<td>
+
+						{% csrf_token %}
+						{% bootstrap_form form %}
+						
+						<input type="file" id="inputFile" />
+						<script type="text/javascript">
+							document.getElementById('inputFile').addEventListener('change', fileLoad, false)
+							function fileLoad(event){
+								const reader = new FileReader()
+								reader.onload = handleFileLoad;
+								reader.readAsText(event.target.files[0])
+							}
+							function handleFileLoad(event){
+								console.log(event);
+								document.getElementById('fileContent').textContent = event.target.result;
+							}
+						</script>
+					</td>
+					<!-- File Encrypt -->
+					<td rowspan="2">
+						<table align = "center" border="1" bordercolor="black" style="width: 98%;">
+							<tr>
+								<td>
+									<button type="button" onclick="attrs('and_op')">AND Operation</button>
+									<input type="text" id="and_op" name="and_op" readonly="readonly" style="width: 30%;" value=0 />
+								</td>
+								<td>
+									<button type="button" onclick="attrs('or_op')">OR Operation</button>
+									<input type="text" id="or_op" name="or_op" readonly="readonly" style="width: 30%;" value=0 />
+									<script>
+										function attrs(operation){
+											var cbox = document.getElementsByName("attr");
+											var vals = 0;
+											for (var i=0, n=cbox.length;i<n;i++) {
+												if (cbox[i].checked) {
+													vals += 0x1 << i;
+													cbox[i].checked = false;
+												}
+											}
+											document.getElementById(operation).value = vals;
+										}
+									</script>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<input type="checkbox" name="attr" value="Employee"> Employee<br>
+									<input type="checkbox" name="attr" value="Team_Leader"> Team Leader<br>
+									<input type="checkbox" name="attr" value="Project_Manager"> Project Manager<br>
+									<input type="checkbox" name="attr" value="AsstProject_Manager"> AsstProject Manager<br>
+									<input type="checkbox" name="attr" value="Manager"> Manager<br>
+									<input type="checkbox" name="attr" value="Admin"> Admin<br>
+								</td>
+								<td>
+									<input type="checkbox" name="attr" value="Non-Employee"> Non-Employee<br>
+									<input type="checkbox" name="attr" value="Unregistered"> Unregistered<br>
+									<input type="checkbox" name="attr" value="Registered"> Registered<br>
+									<input type="checkbox" name="attr" value="Student"> Student<br>
+									<input type="checkbox" name="attr" value="Trainee"> Trainee<br>
+									<input type="checkbox" name="attr" value="HR"> HR<br>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<table align = "center" border="1" bordercolor="black" style="width: 99%;">
+										<th>
+											Encrypted File Content
+										</th>
+										<tr><td height="450">
+											<textarea id="crpyted_content" name="crpyted_content" readonly="readonly" style="width: 100%; border: 0; height: 100%;"></textarea>
+										</td></tr>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td>Enter File Name to Save</td>
+								<td><input type="text" name="filename" style="width: 100%;"></td>
+							</tr>
+							<tr>
+								<td>
+									<!-- <script src="{% static 'js/encryption.js' %}"></script> -->
+									<!-- <button type="button" onclick="encryption('fileContent', 'crpyted_content')">ENCRYPTION</button> -->
+									<button type="button" onclick="encryption()">ENCRYPTION</button>
+									<script src="{% static 'js/aes.js' %}"></script>
+									<script>
+										function encryption() {
+											var message = document.getElementById('fileContent').textContent;
+											var password = document.getElementById("pseudonym").value;
+											var encrypt = CryptoJS.AES.encrypt(message,password);
+											document.getElementById("crpyted_content").value = encrypt;
+										}
+									</script>
+								</td>
+								<td><button type="submit" value="upload">UPLOAD</button></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<table border="1" bordercolor="black" align = "center" style="width: 98%; height: 98%;">
+							<!-- File Content -->
+							<th colspan="2">File Content</th>
+							<tr><td colspan="2" height="500">
+								<textarea id="fileContent" readonly="readonly" style="width: 100%; border: 0; height: 100%;"></textarea>
+							</td></tr>
+							<tr>
+								<td>Data Owner ID</td>
+								<td><input type="text" value='{{ request.user.username }}' readonly="readonly" style="width: 100%; border: 0;"></td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<button type="button" onclick="calculate('{{ request.user.username }}')" style="width: 100%;">Calculate pseudonym</button>
+									<script src="{% static 'js/sha256.js' %}"></script>
+									<script>
+										function calculate(username) {
+											document.getElementById("pseudonym").value = SHA256(username);
+											document.getElementById("key").value = SHA256(username);
+										}
+									</script>
+								</td>
+							</tr>
+							<tr>
+								<td>Pseudonym</td>
+								<td><input id="pseudonym" type="text" readonly="readonly" style="width: 100%; border: 0;"></td>
+							</tr>
+							<tr>
+								<td>Anonymous key</td>
+								<td><input id="key" type="text" readonly="readonly" style="width: 100%; border: 0;"></td>
+							</tr>
+						</table> 
+					</td>
+				</tr>
+			</table>
+		</form>
+
+		<hr>
+
+	{% else %}
+
+		<script>
+
+			window.location.href = "{% url 'accounts:log_in' %}"
+			
+		</script>
+
+	{% endif %}
+
+{% endblock %}

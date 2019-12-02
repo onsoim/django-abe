@@ -1,16 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, REDIRECT_FIELD_NAME
-from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import (
 	LogoutView as BaseLogoutView, PasswordChangeView as BasePasswordChangeView,
 )
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import redirect
 from django.utils.crypto import get_random_string
 from django.utils.decorators import method_decorator
 from django.utils.http import is_safe_url
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
@@ -112,7 +109,6 @@ class SignUpView(GuestOnlyView, FormView):
 		act.username = form.cleaned_data['username']
 		act.first_name = form.cleaned_data['first_name']
 		act.last_name = form.cleaned_data['last_name']
-		act.gender = form.cleaned_data['gender']
 		act.email = form.cleaned_data['email']
 		act.attr = 0
 		for i in form.cleaned_data['attr']:

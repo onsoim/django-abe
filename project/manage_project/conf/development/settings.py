@@ -30,6 +30,7 @@ INSTALLED_APPS = [
 	# Application apps
 	'main',
 	'accounts',
+	'abe',
 ]
 
 MIDDLEWARE = [
@@ -78,17 +79,17 @@ DEFAULT_FROM_EMAIL = 'test@example.com'
 # }
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'accounts',
-        'USER': 'onsoim',
-        'PASSWORD': 'onsoim',
-        'HOST': 'localhost',
-        'PORT': '3306',
-        'OPTIONS': {
-            'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
-        }
-    }
+	'default': {
+		'ENGINE': 'django.db.backends.mysql',
+		'NAME': 'accounts',
+		'USER': 'onsoim',
+		'PASSWORD': 'onsoim',
+		'HOST': 'localhost',
+		'PORT': '3306',
+		'OPTIONS': {
+			'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
+		}
+	}
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -114,7 +115,7 @@ LOGIN_REDIRECT_URL = 'index'
 LOGIN_URL = 'accounts:log_in'
 USE_REMEMBER_ME = True
 
-SIGN_UP_FIELDS = ['username', 'first_name', 'last_name', 'gender', 'email', 'password1', 'password2']
+SIGN_UP_FIELDS = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
 if DISABLE_USERNAME:
 	SIGN_UP_FIELDS = ['first_name', 'last_name', 'email', 'password1', 'password2']
 
@@ -129,8 +130,8 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(CONTENT_DIR, 'static')
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = os.path.join(CONTENT_DIR, 'media')
-MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'abe/media')
+MEDIA_URL = '/abe/media/'
 
 STATICFILES_DIRS = [
 	os.path.join(CONTENT_DIR, 'assets'),

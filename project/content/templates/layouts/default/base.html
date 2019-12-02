@@ -13,7 +13,7 @@
 
 	<link rel="icon" href="{% static 'favicon.ico' %}">
 
-	<title>OSS Sign in and Sign up</title>
+	<title>OSS ABE</title>
 
 	<link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 	<link href="{% static 'css/styles.css' %}" rel="stylesheet">
@@ -34,16 +34,10 @@
 		<ul class="navbar-nav mr-auto">
 			{% if request.user.is_authenticated %}
 				<li class="nav-item">
-					<a class="nav-link" href="{% url 'accounts:change_password' %}">Change password</a>
+					<a class="nav-link" href="{% url 'abe:abe_encrypt' %}">Encryption</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="{% url 'accounts:change_profile' %}">Change profile</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="{% url 'accounts:change_email' %}">Change email</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="{% url 'accounts:update' %}">Update Profile</a>
+					<a class="nav-link" href="{% url 'abe:abe_decrypt' %}">Decryption</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="{% url 'accounts:log_out' %}">Log out</a>

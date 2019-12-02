@@ -10,14 +10,8 @@ class Profile(models.Model):
 	first_name = models.CharField(max_length=30)
 	last_name = models.CharField(max_length=150)
 
-	CHOICE_GENDER = (
-		('M', 'Male'),
-		('F', 'Female'),
-		('O', 'Other'),
-	)
-	gender = models.CharField(max_length=1, choices=CHOICE_GENDER)
 	email = models.EmailField(blank=True)
-	attr = models.IntegerField
+	attr = models.IntegerField()
 
 
 # class UserProfile(AbstractUser):

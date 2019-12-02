@@ -1,0 +1,54 @@
+{% extends 'layouts/default/base.html' %}
+
+{% load bootstrap4 %}
+
+{% load static %}
+
+{% block content %}
+
+	{% if request.user.is_authenticated %}
+
+		<table cellspacing=0 width=100% border=1>
+			<tr>
+				<td><p align=center>id</p></td>
+				<td><p align=center>{{ file.id }}</p></td>
+			</tr>
+			<tr>
+				<td><p align=center>username</p></td>
+				<td><p align=center>{{ file.username }}</p></td>
+			</tr>
+			<tr>
+				<td><p align=center>encrypted content</p></td>
+				<td><textarea readonly="readonly" style="width: 100%; border: 0; height: 100%;">{{ file.content }}</textarea></td>
+			</tr>
+			<tr>
+				<td><p align=center>decrypted content</p></td>
+				<td><textarea id="decryptedContent" readonly="readonly" style="width: 100%; border: 0; height: 100%;"></textarea></td>
+			</tr>
+		</table>
+
+		<button onclick="decryption({{ attr }}, {{ file.and_attr }}, {{ file.or_attr }})">decrypt</button>
+		<script src="{% static 'js/aes.js' %}"></script>
+		<script src="{% static 'js/sha256.js' %}"></script>
+		<script src="{% static 'js/cryption.js' %}"></script>
+		<script>
+			function decryption(attr_user, attr_and , attr_or) {
+				if (checkAttr(attr_user, attr_and, 1) & checkAttr(attr_user, attr_or, 0)) {
+					var decrypted = CryptoJS.AES.decrypt("{{ file.content }}",SHA256("{{ file.username }}")).toString(CryptoJS.enc.Utf8);
+					document.getElementById("decryptedContent").textContent = decrypted;
+				}
+				else alert("Permission Denied!");
+			}
+		</script>
+
+	{% else %}
+
+		<script>
+
+			window.location.href = "{% url 'accounts:log_in' %}"
+			
+		</script>
+
+	{% endif %}
+
+{% endblock %}

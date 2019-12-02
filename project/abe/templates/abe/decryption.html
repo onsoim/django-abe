@@ -1,0 +1,50 @@
+{% extends 'layouts/default/base.html' %}
+
+{% load bootstrap4 %}
+
+{% load static %}
+
+{% block content %}
+
+	{% if request.user.is_authenticated %}
+
+	<table cellspacing=1 width=100% border=1>
+		<tr>
+			<td><p align=center>번호</p></td>
+			<td><p align=center>파일 이름</p></td>
+		</tr>
+
+		{% if boardList %}
+
+			<ul>
+
+				{% for post in boardList %}
+
+				<tr>
+					<td><p align=center>{{ post.id }}</p></td>
+					<td><p align=center><a href="./file?id={{ post.id }}">{{ post.filename }}</a></p></td>
+				</tr>
+
+				{% endfor %}
+
+			</ul>
+
+		{% else %}
+
+			<p>No Data.</p>
+
+		{% endif %}
+		
+	</table>
+
+	{% else %}
+
+		<script>
+
+			window.location.href = "{% url 'accounts:log_in' %}"
+			
+		</script>
+
+	{% endif %}
+
+{% endblock %}

@@ -119,13 +119,19 @@ class SignUpForm(UserCreationForm):
 		fields = settings.SIGN_UP_FIELDS
 
 	email = forms.EmailField(label=_('Email'), help_text=_('Required. Enter an existing email address.'))
-	gender = forms.ChoiceField(label=_('Gender'), choices=[('M','Male'),('F','Female'),('O','Other')], widget=forms.RadioSelect)
 	attr = forms.MultipleChoiceField(label=_('Attr'), choices=[
-			(0x01,'Employee'),
-			(0x02,'Team Leader'),
-			(0x04,'Project Manager'),
-			(0x08,'Admin'),
-			(0x10,'student'),
+			(0x01 << 0x0,'Employee'),
+			(0x01 << 0x1,'Team Leader'),
+			(0x01 << 0x2,'Project Manager'),
+			(0x01 << 0x3,'Assistant Project'),
+			(0x01 << 0x4,'Managerer'),
+			(0x01 << 0x5,'Admin'),
+			(0x01 << 0x6,'NonEmployee'),
+			(0x01 << 0x7,'Unregistered'),
+			(0x01 << 0x8,'Registered'),
+			(0x01 << 0x9,'student'),
+			(0x01 << 0xa,'Trainee'),
+			(0x01 << 0xb,'HR'),
 		], widget=forms.CheckboxSelectMultiple)
 
 	def clean_email(self):
